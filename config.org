@@ -1,0 +1,69 @@
+#+TITLE: DT's Emacs Config
+#+AUTHOR: Derek Taylor
+
+* Package management
+** Setting custom look and feel
+#+begin_src emacs-lisp
+  (toggle-frame-fullscreen)
+#+end_src
+
+** Setup package.el to work with MELPA.
+#+begin_src emacs-lisp
+    (require 'package)
+    (add-to-list 'package-archives
+		 '("melpa" . "https://melpa.org/packages/"))
+    (package-refresh-contents)
+    (package-initialize)
+#+end_src
+
+** Installing use-package
+#+begin_src emacs-lisp
+  (unless (package-installed-p 'use-package)
+    (package-install 'use-package))
+#+end_src
+
+* Adding <el tempo template for emacs lisp src block
+   #+begin_src emacs-lisp
+     (require 'org-tempo)
+     (tempo-define-template "elisp"
+			    '("#+begin_src emacs-lisp" n
+			      p n
+			      "#+end_src")
+		       "<el"
+		       "Insert a emacs-lisp src block"
+		  'org-tempo-tags)
+   #+end_src
+
+* EVIL MODE
+#+begin_src emacs-lisp
+  (use-package evil
+    :ensure t ;; install evil if not installed
+    :init     ;; tweak evil's configuration before loading it
+    (setq evil-want-integration t) ;; optional since it's already set to t be default
+    (setq evil-want-keybinging nil)
+    (setq evil-vsplit-window-right t)
+    (setq evil-split-window-below t)
+    (evil-mode))
+  (use-package evil-collection
+    :after evil
+    :ensure t
+    :config
+    (evil-collection-init))
+#+end_src
+
+* DOOM theme
+#+begin_src emacs-lisp
+  (use-package doom-themes :ensure t)
+  (setq doom-themes-enable-bold t    ;; if nil, bold is universally disabled
+        doom-themes-enable-italic t) ;; if nil, italics is universally disabled
+  (load-theme 'doom-one t)
+#+end_src
+
+* Key chord
+#+begin_src emacs-lisp
+  (use-package key-chord :ensure t)
+  (key-chord-mode 1)
+  (key-chord-define-global "jk"     'dabbrev-expand)
+  (key-chord-define-global "fd"     'evil-normal-state)
+  (key-chord-define-globac "cv"     'reindent-then-newline-and-indent)
+#+end_src
